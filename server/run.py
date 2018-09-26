@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.FATAL)
 port = os.getenv('VCAP_APP_PORT', '5000')
 
 # Global variables for credentials
-apikey = ''
+apikey = 'Pisle8UwpxlbBiP36uJDxfi0LbC4L_92ZEnmcX922iVh'
 classifier_id = ''
 
 
