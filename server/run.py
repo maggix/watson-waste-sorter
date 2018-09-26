@@ -25,6 +25,7 @@ def set_classifier():
     for classifier in classifiers['classifiers']:
         if classifier['name'] == 'waste':
             if classifier['status'] == 'ready':
+                print(classifier)
                 return classifier['classifier_id']
             else:
                 return ''
@@ -58,6 +59,7 @@ def sort():
         visual_recognition = VisualRecognitionV3('2018-03-19',
                                                  iam_apikey=apikey)
         app.logger.info("received file")
+        print('received file')
         global classifier_id
         if classifier_id == '':
             classifier_id = set_classifier()
@@ -70,6 +72,7 @@ def sort():
         url_result = visual_recognition.classify(images_file=images_file,
                                                  parameters=parameters)
         app.logger.info('url_result %s', url_result)
+        print('url_result %s', url_result)
         if len(url_result["images"][0]["classifiers"]) < 1:
             return json.dumps(
                     {"status code": 500, "result": "Image is either not "
@@ -77,10 +80,12 @@ def sort():
                         "confident score": 0})
         list_of_result = url_result["images"][0]["classifiers"][0]["classes"]
         app.logger.info('analyzing list of results')
+        print('analyzing list of results')
         result_class = ''
         result_score = 0
         for result in list_of_result:
             app.logger.info('result: %s', result)
+            print('result: %s', result)
             if result["score"] >= result_score:
                 result_score = result["score"]
                 result_class = result["class"]
@@ -92,6 +97,7 @@ def sort():
         logging.error('error')
         app.logger.error('exception')
         app.logger.error(e)
+        print(e)
         return json.dumps(
             {"status code": 500, "result": "Not an image",
                 "confident score": 0})
