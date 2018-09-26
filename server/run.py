@@ -88,6 +88,8 @@ def sort():
     except Exception as e:
         logging.exception("message")
         logging.error('error')
+        app.logger.error('exception')
+        app.logger.error(e)
         return json.dumps(
             {"status code": 500, "result": "Not an image",
                 "confident score": 0})
