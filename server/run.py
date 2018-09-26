@@ -68,9 +68,9 @@ def sort():
                 return json.dumps(
                     {"status code": 500, "result": "Classifier not ready",
                         "confident score": 0})
-        parameters = json.dumps({'classifier_ids': [classifier_id]})
-        url_result = visual_recognition.classify(images_file=images_file,
-                                                 parameters=parameters).get_result()
+        # parameters = json.dumps({'classifier_ids': [classifier_id]})
+        url_result = visual_recognition.classify(images_file=images_file,classifier_ids=[classifier_id]).get_result()
+                                                 #parameters=parameters).get_result()
         app.logger.info('url_result %s', url_result)
         print('url_result %s', url_result)
         if len(url_result["images"][0]["classifiers"]) < 1:
@@ -85,7 +85,7 @@ def sort():
         result_score = 0
         for result in list_of_result:
             app.logger.info('result: %s', result)
-            print('result: %s', result)
+            print('result: ', result)
             if result["score"] >= result_score:
                 result_score = result["score"]
                 result_class = result["class"]
