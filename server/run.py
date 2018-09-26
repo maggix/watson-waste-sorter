@@ -17,9 +17,10 @@ classifier_id = '' #'waste_1340454629'
 
 # Set Classifier ID
 def set_classifier():
+    app.logger.info('set_classifier')
     visual_recognition = VisualRecognitionV3('2018-03-19', iam_apikey=apikey)
-    classifiers = visual_recognition.list_classifiers().get_result()
-    logging.info(classifiers)
+    classifiers = visual_recognition.list_classifiers().get_result().json()
+    app.logger.info(classifiers)
     for classifier in classifiers['classifiers']:
         if classifier['name'] == 'waste':
             if classifier['status'] == 'ready':
@@ -32,6 +33,7 @@ def set_classifier():
 
 # Create custom waste classifier
 def create_classifier():
+    app.logger.info('create_classifier')
     visual_recognition = VisualRecognitionV3('2018-03-19', iam_apikey=apikey)
     with open('./resources/landfill.zip', 'rb') as landfill, open(
         './resources/recycle.zip', 'rb') as recycle, open(
@@ -54,19 +56,19 @@ def sort():
         images_file = request.files.get('images_file', '')
         visual_recognition = VisualRecognitionV3('2018-03-19',
                                                  iam_apikey=apikey)
-        logging.error("received file")
+        app.logger.info("received file")
         global classifier_id
         if classifier_id == '':
             classifier_id = set_classifier()
             if classifier_id == '':
-                logging.error('classifier_id = %s', classifier_id)
+                app.logger.info('classifier_id = %s', classifier_id)
                 return json.dumps(
                     {"status code": 500, "result": "Classifier not ready",
                         "confident score": 0})
         parameters = json.dumps({'classifier_ids': [classifier_id]})
         url_result = visual_recognition.classify(images_file=images_file,
                                                  parameters=parameters)
-        logging.error('url_result %s', url_result)
+        app.logger.info('url_result %s', url_result)
         if len(url_result["images"][0]["classifiers"]) < 1:
             return json.dumps(
                     {"status code": 500, "result": "Image is either not "
@@ -74,11 +76,10 @@ def sort():
                         "confident score": 0})
         list_of_result = url_result["images"][0]["classifiers"][0]["classes"]
         app.logger.info('analyzing list of results')
-        logging.error('analyzing list of results')
         result_class = ''
         result_score = 0
         for result in list_of_result:
-            logging.error('result: %s', result)
+            app.logger.info('result: %s', result)
             if result["score"] >= result_score:
                 result_score = result["score"]
                 result_class = result["class"]
