@@ -70,7 +70,7 @@ def sort():
                         "confident score": 0})
         parameters = json.dumps({'classifier_ids': [classifier_id]})
         url_result = visual_recognition.classify(images_file=images_file,
-                                                 parameters=parameters)
+                                                 parameters=parameters).get_result()
         app.logger.info('url_result %s', url_result)
         print('url_result %s', url_result)
         if len(url_result["images"][0]["classifiers"]) < 1:
