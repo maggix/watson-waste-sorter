@@ -44,6 +44,7 @@ def create_classifier():
             negative_examples=negative)
     return ''
 
+# https://www.ibm.com/watson/developercloud/visual-recognition/api/v3/python.html?python#authentication
 
 # API destination
 @app.route('/api/sort', methods=['POST'])
@@ -52,10 +53,12 @@ def sort():
         images_file = request.files.get('images_file', '')
         visual_recognition = VisualRecognitionV3('2018-03-19',
                                                  iam_apikey=apikey)
+        app.logger.info('received file')
         global classifier_id
         if classifier_id == '':
             classifier_id = set_classifier()
             if classifier_id == '':
+                app.logger.info('classifier_id = %s', classifier_id)
                 return json.dumps(
                     {"status code": 500, "result": "Classifier not ready",
                         "confident score": 0})
@@ -68,6 +71,7 @@ def sort():
                         "a waste or it's too blurry, please try it again.",
                         "confident score": 0})
         list_of_result = url_result["images"][0]["classifiers"][0]["classes"]
+        app.logger.info('analyzing list of results')
         result_class = ''
         result_score = 0
         for result in list_of_result:
