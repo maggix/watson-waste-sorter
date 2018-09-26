@@ -20,12 +20,12 @@ def set_classifier():
     app.logger.info('set_classifier')
     visual_recognition = VisualRecognitionV3('2018-03-19', iam_apikey=apikey)
     classifiers = visual_recognition.list_classifiers(verbose=True).get_result()
-    print(json.dumps(classifiers, indent=2))
+    # print(json.dumps(classifiers, indent=2))
     #app.logger.error(json.dumps(visual_recognition.list_classifiers().get_result()))
     for classifier in classifiers['classifiers']:
         if classifier['name'] == 'waste':
             if classifier['status'] == 'ready':
-                print(classifier)
+                # print(classifier)
                 return classifier['classifier_id']
             else:
                 return ''
@@ -58,8 +58,8 @@ def sort():
         images_file = request.files.get('images_file', '')
         visual_recognition = VisualRecognitionV3('2018-03-19',
                                                  iam_apikey=apikey)
-        app.logger.info("received file")
-        print('received file')
+        # app.logger.info("received file")
+        # print('received file')
         global classifier_id
         if classifier_id == '':
             classifier_id = set_classifier()
@@ -72,20 +72,20 @@ def sort():
         url_result = visual_recognition.classify(images_file=images_file,classifier_ids=[classifier_id]).get_result()
                                                  #parameters=parameters).get_result()
         app.logger.info('url_result %s', url_result)
-        print('url_result %s', url_result)
+        # print('url_result %s', url_result)
         if len(url_result["images"][0]["classifiers"]) < 1:
             return json.dumps(
                     {"status code": 500, "result": "Image is either not "
                         "a waste or it's too blurry, please try it again.",
                         "confident score": 0})
         list_of_result = url_result["images"][0]["classifiers"][0]["classes"]
-        app.logger.info('analyzing list of results')
-        print('analyzing list of results')
+        # app.logger.info('analyzing list of results')
+        # print('analyzing list of results')
         result_class = ''
         result_score = 0
         for result in list_of_result:
-            app.logger.info('result: %s', result)
-            print('result: ', result)
+            # app.logger.info('result: %s', result)
+            # print('result: ', result)
             if result["score"] >= result_score:
                 result_score = result["score"]
                 result_class = result["class"]
