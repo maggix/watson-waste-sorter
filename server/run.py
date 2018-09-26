@@ -19,6 +19,7 @@ classifier_id = '' #'waste_1340454629'
 def set_classifier():
     visual_recognition = VisualRecognitionV3('2018-03-19', iam_apikey=apikey)
     classifiers = visual_recognition.list_classifiers().get_result()
+    logger.info(classifiers)
     for classifier in classifiers['classifiers']:
         if classifier['name'] == 'waste':
             if classifier['status'] == 'ready':
@@ -53,13 +54,11 @@ def sort():
         images_file = request.files.get('images_file', '')
         visual_recognition = VisualRecognitionV3('2018-03-19',
                                                  iam_apikey=apikey)
-        app.logger.info('received file')
         logging.error("received file")
         global classifier_id
         if classifier_id == '':
             classifier_id = set_classifier()
             if classifier_id == '':
-                app.logger.info('classifier_id = %s', classifier_id)
                 logging.error('classifier_id = %s', classifier_id)
                 return json.dumps(
                     {"status code": 500, "result": "Classifier not ready",
@@ -67,6 +66,7 @@ def sort():
         parameters = json.dumps({'classifier_ids': [classifier_id]})
         url_result = visual_recognition.classify(images_file=images_file,
                                                  parameters=parameters)
+        logging.error('url_result %s', url_result)
         if len(url_result["images"][0]["classifiers"]) < 1:
             return json.dumps(
                     {"status code": 500, "result": "Image is either not "
