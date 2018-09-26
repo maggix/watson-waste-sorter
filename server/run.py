@@ -19,8 +19,9 @@ classifier_id = '' #'waste_1340454629'
 def set_classifier():
     app.logger.info('set_classifier')
     visual_recognition = VisualRecognitionV3('2018-03-19', iam_apikey=apikey)
-    classifiers = visual_recognition.list_classifiers(verbose=True).get_result()
-    app.logger.error(json.dumps(classifiers))
+    classifiers = visual_recognition.list_classifiers(verbose=True) #.get_result()
+    
+    app.logger.error(json.dumps(visual_recognition.list_classifiers().get_result()))
     for classifier in classifiers['classifiers']:
         if classifier['name'] == 'waste':
             if classifier['status'] == 'ready':
