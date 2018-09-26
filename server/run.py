@@ -12,7 +12,7 @@ port = os.getenv('VCAP_APP_PORT', '5000')
 
 # Global variables for credentials
 apikey = 'Pisle8UwpxlbBiP36uJDxfi0LbC4L_92ZEnmcX922iVh'
-classifier_id = ''
+classifier_id = 'waste_1340454629'
 
 
 # Set Classifier ID
