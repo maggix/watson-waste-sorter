@@ -103,4 +103,4 @@ if __name__ == "__main__":
         'watson_vision_combined')
     apikey = visual_creds['apikey']
     classifier_id = set_classifier()
-    app.run(host='0.0.0.0', port=int(port))
+    app.run(host='0.0.0.0', port=int(port), debug=True)
