@@ -19,7 +19,7 @@ classifier_id = '' #'waste_1340454629'
 def set_classifier():
     visual_recognition = VisualRecognitionV3('2018-03-19', iam_apikey=apikey)
     classifiers = visual_recognition.list_classifiers().get_result()
-    logger.info(classifiers)
+    logging.info(classifiers)
     for classifier in classifiers['classifiers']:
         if classifier['name'] == 'waste':
             if classifier['status'] == 'ready':
@@ -78,6 +78,7 @@ def sort():
         result_class = ''
         result_score = 0
         for result in list_of_result:
+            logging.error('result: %s', result)
             if result["score"] >= result_score:
                 result_score = result["score"]
                 result_class = result["class"]
