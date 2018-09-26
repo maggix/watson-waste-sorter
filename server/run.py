@@ -84,7 +84,9 @@ def sort():
         return json.dumps(
             {"status code": 200, "result": result_class,
                 "confident score": result_score})
-    except Exception:
+    except Exception as e:
+        logging.exception("message")
+        logging.error('error')
         return json.dumps(
             {"status code": 500, "result": "Not an image",
                 "confident score": 0})
