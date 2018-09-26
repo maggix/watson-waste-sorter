@@ -19,7 +19,7 @@ classifier_id = '' #'waste_1340454629'
 def set_classifier():
     app.logger.info('set_classifier')
     visual_recognition = VisualRecognitionV3('2018-03-19', iam_apikey=apikey)
-    classifiers = visual_recognition.list_classifiers().get_result().json()
+    classifiers = visual_recognition.list_classifiers() #.get_result().json()
     app.logger.info(classifiers)
     for classifier in classifiers['classifiers']:
         if classifier['name'] == 'waste':
